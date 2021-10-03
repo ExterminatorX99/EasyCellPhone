@@ -1,1 +1,1 @@
-Makes the mechanic sell all the materials for a Cell Phone.
+Makes the Mechanic and Goblin Tinkerer sell all the materials needed for a Cell Phone.

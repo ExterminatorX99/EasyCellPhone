@@ -6,14 +6,18 @@ namespace EasyCellPhone
 {
 	public class EasyNPC : GlobalNPC
 	{
-		private static readonly int[] MechanicExtraItems =
+		private static readonly int[] GoblinExtraItems =
 		{
 			ItemID.MagicMirror,
 			ItemID.DepthMeter,
 			ItemID.Compass,
 			ItemID.Radar,
 			ItemID.TallyCounter,
-			ItemID.LifeformAnalyzer,
+			ItemID.LifeformAnalyzer
+		};
+
+		private static readonly int[] MechanicExtraItems =
+		{
 			ItemID.DPSMeter,
 			ItemID.Stopwatch,
 			ItemID.MetalDetector,
@@ -24,9 +28,17 @@ namespace EasyCellPhone
 
 		public override void SetupShop(int type, Chest shop, ref int nextSlot)
 		{
-			if (type == NPCID.Mechanic)
-				foreach (int item in MechanicExtraItems)
-					shop.item[nextSlot++].SetDefaults(item);
+			switch (type)
+			{
+				case NPCID.GoblinTinkerer:
+					foreach (int item in GoblinExtraItems)
+						shop.item[nextSlot++].SetDefaults(item);
+					break;
+				case NPCID.Mechanic:
+					foreach (int item in MechanicExtraItems)
+						shop.item[nextSlot++].SetDefaults(item);
+					break;
+			}
 		}
 	}
 }
