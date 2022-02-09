@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -6,38 +7,38 @@ namespace EasyCellPhone
 {
 	public class EasyNPC : GlobalNPC
 	{
-		private static readonly int[] GoblinExtraItems =
+		private static readonly Dictionary<int, short[]> NPCTypeToExtraItems = new()
 		{
-			ItemID.MagicMirror,
-			ItemID.DepthMeter,
-			ItemID.Compass,
-			ItemID.Radar,
-			ItemID.TallyCounter,
-			ItemID.LifeformAnalyzer
+			[NPCID.GoblinTinkerer] = new[]
+			{
+				ItemID.MagicMirror,
+				ItemID.DepthMeter,
+				ItemID.Compass,
+				ItemID.Radar,
+				ItemID.TallyCounter,
+				ItemID.LifeformAnalyzer,
+			},
+			[NPCID.Mechanic] = new[]
+			{
+				ItemID.DPSMeter,
+				ItemID.Stopwatch,
+				ItemID.MetalDetector,
+				ItemID.FishermansGuide,
+				ItemID.WeatherRadio,
+				ItemID.Sextant,
+			},
 		};
 
-		private static readonly int[] MechanicExtraItems =
-		{
-			ItemID.DPSMeter,
-			ItemID.Stopwatch,
-			ItemID.MetalDetector,
-			ItemID.FishermansGuide,
-			ItemID.WeatherRadio,
-			ItemID.Sextant
-		};
+		public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => NPCTypeToExtraItems.ContainsKey(entity.type);
 
 		public override void SetupShop(int type, Chest shop, ref int nextSlot)
 		{
-			switch (type)
+			if (!NPCTypeToExtraItems.TryGetValue(type, out var items))
+				return;
+
+			foreach (var item in items)
 			{
-				case NPCID.GoblinTinkerer:
-					foreach (int item in GoblinExtraItems)
-						shop.item[nextSlot++].SetDefaults(item);
-					break;
-				case NPCID.Mechanic:
-					foreach (int item in MechanicExtraItems)
-						shop.item[nextSlot++].SetDefaults(item);
-					break;
+				shop.item[nextSlot++].SetDefaults(item);
 			}
 		}
 	}
